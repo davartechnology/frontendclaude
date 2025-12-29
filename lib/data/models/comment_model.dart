@@ -1,32 +1,49 @@
-// lib/data/models/comment_model.dart
 class CommentModel {
   final String id;
-  final String userId;
   final String videoId;
-  final String text;
-  final int likesCount;
+  final String userId;
+  final String username;
+  final String avatarUrl;
+  final String content;
   final DateTime createdAt;
-  final UserModel user;
+  final int likesCount;
 
   CommentModel({
     required this.id,
-    required this.userId,
     required this.videoId,
-    required this.text,
-    this.likesCount = 0,
+    required this.userId,
+    required this.username,
+    required this.avatarUrl,
+    required this.content,
     required this.createdAt,
-    required this.user,
+    this.likesCount = 0,
   });
 
   factory CommentModel.fromJson(Map<String, dynamic> json) {
     return CommentModel(
-      id: json['id'],
-      userId: json['userId'],
-      videoId: json['videoId'],
-      text: json['text'],
+      id: json['id'] ?? '',
+      videoId: json['videoId'] ?? '',
+      userId: json['userId'] ?? '',
+      username: json['username'] ?? '',
+      avatarUrl: json['avatarUrl'] ?? '',
+      content: json['content'] ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
       likesCount: json['likesCount'] ?? 0,
-      createdAt: DateTime.parse(json['createdAt']),
-      user: UserModel.fromJson(json['user']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'videoId': videoId,
+      'userId': userId,
+      'username': username,
+      'avatarUrl': avatarUrl,
+      'content': content,
+      'createdAt': createdAt.toIso8601String(),
+      'likesCount': likesCount,
+    };
   }
 }

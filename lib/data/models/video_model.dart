@@ -1,4 +1,5 @@
-// lib/data/models/video_model.dart
+import 'user_model.dart';
+
 class VideoModel {
   final String id;
   final String userId;
@@ -36,22 +37,28 @@ class VideoModel {
     this.isFavorited,
   });
 
+  /// ✅ ALIAS POUR ÉVITER LES ERREURS `viewsCount`
+  int get viewsCount => views;
+
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
-      id: json['id'],
-      userId: json['userId'],
-      videoUrl: json['videoUrl'],
-      thumbnailUrl: json['thumbnailUrl'],
+      id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
+      videoUrl: json['videoUrl'] ?? '',
+      thumbnailUrl: json['thumbnailUrl'] ?? '',
       title: json['title'],
       description: json['description'],
-      duration: json['duration'],
+      duration: json['duration'] ?? 0,
       views: json['views'] ?? 0,
       likesCount: json['likesCount'] ?? 0,
       commentsCount: json['commentsCount'] ?? 0,
       sharesCount: json['sharesCount'] ?? 0,
       isBoosted: json['isBoosted'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
-      user: UserModel.fromJson(json['user']),
+      createdAt: DateTime.parse(
+        json['createdAt'] ??
+            DateTime.now().toIso8601String(),
+      ),
+      user: UserModel.fromJson(json['user'] ?? {}),
       isLiked: json['isLiked'],
       isFavorited: json['isFavorited'],
     );
