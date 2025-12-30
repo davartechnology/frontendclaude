@@ -97996,7 +97996,7 @@ $1(a){return A.aMB()},
 $S:636}
 A.o9.prototype={
 ac_(){var s="application/json",r=$.aHR().ga0T().h(0,"BACKEND_URL")
-if(r==null)r="http://localhost:3000"
+if(r==null)r="https://backendclaude-j98w.onrender.com"
 r=A.aZt(A.aI8(r+"/api",B.oM,A.a9(["Content-Type",s,"Accept",s],t.N,t.z),B.oM))
 this.a!==$&&A.b9()
 this.a=r
