@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
@@ -13,10 +15,12 @@ import '../../core/network/api_result.dart';
 
 class PublishScreen extends ConsumerStatefulWidget {
   final String videoPath;
+  final Uint8List? videoBytes; // For web compatibility
 
   const PublishScreen({
     super.key,
     required this.videoPath,
+    this.videoBytes,
   });
 
   @override
@@ -37,13 +41,28 @@ class _PublishScreenState extends ConsumerState<PublishScreen> {
   }
 
   Future<void> _initializeVideo() async {
-    _controller = VideoPlayerController.file(File(widget.videoPath));
-    await _controller.initialize();
-    await _controller.setLooping(true);
-    await _controller.play();
-    
-    if (mounted) {
-      setState(() => _isInitialized = true);
+    try {
+      if (kIsWeb && widget.videoBytes != null) {
+        // Web: use network URL or bytes
+        _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoPath));
+      } else {
+        // Mobile: use file path
+        _controller = VideoPlayerController.file(File(widget.videoPath));
+      }
+
+      await _controller.initialize();
+      await _controller.setLooping(true);
+      await _controller.play();
+
+      if (mounted) {
+        setState(() => _isInitialized = true);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur chargement vidéo: $e')),
+        );
+      }
     }
   }
 
@@ -68,7 +87,8 @@ class _PublishScreenState extends ConsumerState<PublishScreen> {
       // Étape 1: Upload vers Cloudinary
       final cloudinary = CloudinaryService();
       final videoUrl = await cloudinary.uploadVideo(
-        File(widget.videoPath),
+        kIsWeb && widget.videoBytes != null ? widget.videoBytes : File(widget.videoPath),
+        fileName: kIsWeb ? 'video.mp4' : null,
         onProgress: (progress) {
           setState(() => _uploadProgress = progress * 0.7); // 70% pour Cloudinary
         },

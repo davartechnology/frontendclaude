@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import '../../config/env.dart';
 import '../utils/logger.dart';
@@ -10,13 +12,28 @@ class CloudinaryService {
 
   final Dio _dio = Dio();
 
-  Future<String?> uploadVideo(File file, {
+  Future<String?> uploadVideo(dynamic file, {
     Function(double)? onProgress,
+    String? fileName,
   }) async {
     try {
-      final fileName = file.path.split('/').last;
+      String actualFileName;
+      MultipartFile multipartFile;
+
+      if (file is File) {
+        // Mobile: use file path
+        actualFileName = fileName ?? file.path.split('/').last;
+        multipartFile = await MultipartFile.fromFile(file.path, filename: actualFileName);
+      } else if (file is Uint8List) {
+        // Web: use bytes
+        actualFileName = fileName ?? 'video.mp4';
+        multipartFile = MultipartFile.fromBytes(file, filename: actualFileName);
+      } else {
+        throw Exception('Unsupported file type');
+      }
+
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(file.path, filename: fileName),
+        'file': multipartFile,
         'upload_preset': Env.cloudinaryUploadPreset,
       });
 
@@ -40,11 +57,25 @@ class CloudinaryService {
     }
   }
 
-  Future<String?> uploadImage(File file) async {
+  Future<String?> uploadImage(dynamic file, {String? fileName}) async {
     try {
-      final fileName = file.path.split('/').last;
+      String actualFileName;
+      MultipartFile multipartFile;
+
+      if (file is File) {
+        // Mobile: use file path
+        actualFileName = fileName ?? file.path.split('/').last;
+        multipartFile = await MultipartFile.fromFile(file.path, filename: actualFileName);
+      } else if (file is Uint8List) {
+        // Web: use bytes
+        actualFileName = fileName ?? 'image.jpg';
+        multipartFile = MultipartFile.fromBytes(file, filename: actualFileName);
+      } else {
+        throw Exception('Unsupported file type');
+      }
+
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(file.path, filename: fileName),
+        'file': multipartFile,
         'upload_preset': Env.cloudinaryUploadPreset,
       });
 

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:go_router/go_router.dart';
@@ -6,10 +8,12 @@ import '../../config/routes.dart';
 
 class EditVideoScreen extends StatefulWidget {
   final String videoPath;
+  final Uint8List? videoBytes; // For web compatibility
 
   const EditVideoScreen({
     super.key,
     required this.videoPath,
+    this.videoBytes,
   });
 
   @override
@@ -29,7 +33,14 @@ class _EditVideoScreenState extends State<EditVideoScreen> {
 
   Future<void> _initializeVideo() async {
     try {
-      _controller = VideoPlayerController.file(File(widget.videoPath));
+      if (kIsWeb && widget.videoBytes != null) {
+        // Web: use network URL
+        _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoPath));
+      } else {
+        // Mobile: use file path
+        _controller = VideoPlayerController.file(File(widget.videoPath));
+      }
+
       await _controller!.initialize();
       await _controller!.setLooping(true);
 
@@ -68,6 +79,7 @@ class _EditVideoScreenState extends State<EditVideoScreen> {
     // Naviguer vers l'écran de publication avec la vidéo
     context.push(
       '${AppRoutes.publish}?path=${Uri.encodeComponent(widget.videoPath)}',
+      extra: widget.videoBytes, // Pass video bytes for web compatibility
     );
   }
 

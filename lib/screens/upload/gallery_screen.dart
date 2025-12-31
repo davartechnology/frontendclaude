@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:go_router/go_router.dart';
@@ -22,9 +24,17 @@ class _GalleryScreenState extends State<GalleryScreen> {
       );
 
       if (video != null && mounted) {
+        Uint8List? videoBytes;
+
+        // For web, read the file as bytes
+        if (kIsWeb) {
+          videoBytes = await video.readAsBytes();
+        }
+
         // Naviguer vers l'écran d'édition avec la vidéo sélectionnée
         context.push(
           '${AppRoutes.editVideo}?path=${Uri.encodeComponent(video.path)}',
+          extra: videoBytes, // Pass video bytes for web compatibility
         );
       }
     } catch (e) {

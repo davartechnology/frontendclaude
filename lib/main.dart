@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -162,7 +163,10 @@ class MyApp extends ConsumerWidget {
           builder: (context, state) {
             final path = state.uri.queryParameters['path'];
             if (path != null) {
-              return EditVideoScreen(videoPath: Uri.decodeComponent(path));
+              return EditVideoScreen(
+                videoPath: Uri.decodeComponent(path),
+                videoBytes: state.extra as Uint8List?,
+              );
             }
             return const Scaffold(body: Center(child: Text('Video path missing')));
           },
@@ -172,7 +176,10 @@ class MyApp extends ConsumerWidget {
           builder: (context, state) {
             final path = state.uri.queryParameters['path'];
             if (path != null) {
-              return PublishScreen(videoPath: Uri.decodeComponent(path));
+              return PublishScreen(
+                videoPath: Uri.decodeComponent(path),
+                videoBytes: state.extra as Uint8List?,
+              );
             }
             return const Scaffold(body: Center(child: Text('Video path missing')));
           },
