@@ -36,6 +36,7 @@ class DefaultFirebaseOptions {
     authDomain: 'zyn-app.firebaseapp.com',
     storageBucket: 'zyn-app.firebasestorage.app',
   );
+  
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAAy0EgeFbP3bk03wiKi-XicG8bmLNHqes',
