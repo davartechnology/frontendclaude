@@ -6,7 +6,7 @@ class Env {
   static String get supabaseAnonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
   // Backend
-  static String get backendUrl => dotenv.env['BACKEND_URL'] ?? 'http://localhost:3000';
+  static String get backendUrl => dotenv.env['BACKEND_URL'] ?? 'https://backendclaude-j98w.onrender.com';
   static int get apiTimeout => int.tryParse(dotenv.env['API_TIMEOUT'] ?? '30000') ?? 30000;
 
   // Cloudinary
