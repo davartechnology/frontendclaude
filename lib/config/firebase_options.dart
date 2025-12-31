@@ -29,16 +29,16 @@ class DefaultFirebaseOptions {
 
   // ✅ AJOUTE CETTE SECTION WEB
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBj1FxckSOBL61WTmBCUdJN4Dfon11WXkk',
-    appId: '1:483121241030:web:1ca606e913cc05843370c7', // Format type pour le web
-    messagingSenderId: '483121241030',
-    projectId: 'zynk-dc8d9',
-    authDomain: 'zynk-dc8d9.firebaseapp.com',
-    storageBucket: 'zynk-dc8d9.firebasestorage.app',
+    apiKey: 'AIzaSyAAy0EgeFbP3bk03wiKi-XicG8bmLNHqes',
+    appId: '1:444496284422:web:1d9c0c9a2c0d1d78266c87', // Format type pour le web
+    messagingSenderId: '444496284422',
+    projectId: 'zyn-app',
+    authDomain: 'zyn-app.firebaseapp.com',
+    storageBucket: 'zyn-app.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBj1FxckSOBL61WTmBCUdJN4Dfon11WXkk',
+    apiKey: 'AIzaSyAAy0EgeFbP3bk03wiKi-XicG8bmLNHqes',
     appId: '1:483121241030:android:1ca606e913cc05843370c7',
     messagingSenderId: '483121241030',
     projectId: 'zynk-dc8d9',
