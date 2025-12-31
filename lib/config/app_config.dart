@@ -1,7 +1,7 @@
 class AppConfig {
   // API Configuration - ⚠️ Utiliser l'IP locale au lieu de localhost
-  static const String baseUrl = 'http://10.131.30.82:3000/api';
-  static const String socketUrl = 'http://10.131.30.82:3000';
+  static const String baseUrl = 'https://backendclaude-j98w.onrender.com/api';
+  static const String socketUrl = 'https://backendclaude-j98w.onrender.com';
   
   // Agora Configuration
   static const String agoraAppId = '1ab377619bbc403594005aa37f768792';

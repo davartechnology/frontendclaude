@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ConnectivityTest {
@@ -10,23 +10,16 @@ class ConnectivityTest {
     final connectivityResult = await Connectivity().checkConnectivity();
     print('📡 Connectivité réseau: $connectivityResult');
 
-    // Test de connexion à Internet
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('🌐 Connexion Internet: OK');
-      }
-    } on SocketException catch (_) {
-      print('🌐 Connexion Internet: ÉCHEC');
-    }
-
     // Test de connexion au backend
     try {
-      final socket = await Socket.connect('10.131.30.82', 3000, timeout: Duration(seconds: 5));
-      print('🔗 Connexion Backend (10.131.30.82:3000): OK');
-      socket.destroy();
-    } on SocketException catch (_) {
-      print('🔗 Connexion Backend (10.131.30.82:3000): ÉCHEC');
+      final response = await http.get(Uri.parse('https://backendclaude-j98w.onrender.com/health'));
+      if (response.statusCode == 200) {
+        print('🔗 Connexion Backend: OK');
+      } else {
+        print('🔗 Connexion Backend: ÉCHEC (status: ${response.statusCode})');
+      }
+    } catch (_) {
+      print('🔗 Connexion Backend: ÉCHEC');
     }
 
     print('=' * 50);

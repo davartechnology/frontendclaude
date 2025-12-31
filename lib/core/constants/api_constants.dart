@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiConstants {
   // Base - Utilise BACKEND_URL du .env
   static String get baseUrl {
-    final backendUrl = dotenv.env['BACKEND_URL'] ?? 'http://10.131.30.82:3000';
+    final backendUrl = dotenv.env['BACKEND_URL'] ?? 'https://backendclaude-j98w.onrender.com';
     return '$backendUrl/api';
   }
 
