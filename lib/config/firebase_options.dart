@@ -37,7 +37,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'zyn-app.firebasestorage.app',
   );
   
-
+ // ✅ AJOUTE CETTE SECTION ANDROID
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAAy0EgeFbP3bk03wiKi-XicG8bmLNHqes',
     appId: '1:483121241030:android:1ca606e913cc05843370c7',
