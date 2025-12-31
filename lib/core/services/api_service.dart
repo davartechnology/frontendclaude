@@ -14,7 +14,7 @@ class ApiService {
   final StorageService _storage = StorageService();
 
   ApiService() {
-    String baseUrl = kIsWeb ? '${dotenv.env['BACKEND_URL'] ?? 'https://backendclaude-j98w.onrender.com'}/api' : '${dotenv.env['BACKEND_URL'] ?? 'http://10.0.2.2:3000'}/api';
+    String baseUrl = '${dotenv.env['BACKEND_URL'] ?? 'https://backendclaude-j98w.onrender.com'}/api';
 
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,

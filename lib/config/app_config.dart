@@ -1,5 +1,5 @@
 class AppConfig {
-  // API Configuration - ⚠️ Utiliser l'IP locale au lieu de localhost
+  // API Configuration - Production Render URL
   static const String baseUrl = 'https://backendclaude-j98w.onrender.com/api';
   static const String socketUrl = 'https://backendclaude-j98w.onrender.com';
   
