@@ -4,15 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'config/theme.dart';
-import 'config/firebase_options.dart';
+// import 'config/firebase_options.dart';
 import 'navigation/app_router.dart';
 import 'config/routes.dart';
 import 'package:mobile_app/providers/auth_provider.dart';
 import 'package:mobile_app/core/services/connectivity_test.dart';
-import 'package:mobile_app/core/services/firebase_service.dart';
+// import 'package:mobile_app/core/services/firebase_service.dart';
 import 'package:mobile_app/core/services/admob_service.dart';
 import 'screens/splash/splash_screen.dart';
 import 'screens/main/main_screen.dart';
@@ -42,15 +42,15 @@ void main() async {
     print('✅ .env chargé');
 
     // Initialiser Firebase d'abord
-    print('🔥 Initialisation de Firebase...');
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    print('✅ Firebase Core initialisé');
+   //  print('🔥 Initialisation de Firebase...');
+    // await Firebase.initializeApp(
+     // options: DefaultFirebaseOptions.currentPlatform,
+    //);
+   // print('✅ Firebase Core initialisé');
 
     // Puis initialiser le service Firebase
-    await FirebaseService().initialize();
-    print('✅ Firebase Service initialisé');
+    //await FirebaseService().initialize();
+    //print('✅ Firebase Service initialisé');
 
     // Initialiser AdMob
     print('📱 Initialisation d\'AdMob...');

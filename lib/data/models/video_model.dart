@@ -39,6 +39,8 @@ class VideoModel {
 
   /// ✅ ALIAS POUR ÉVITER LES ERREURS `viewsCount`
   int get viewsCount => views;
+  /// ✅ AJOUTE CETTE LIGNE POUR RÉPARER L'ERREUR 'author'
+  UserModel get author => user;
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
