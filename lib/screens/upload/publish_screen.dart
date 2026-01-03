@@ -10,8 +10,10 @@ import '../../data/repositories/video_repository.dart';
 import '../../core/services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/video_provider.dart';
+import '../../providers/feed_provider.dart';
 import '../../data/models/video_model.dart';
 import '../../core/network/api_result.dart';
+import '../../config/routes.dart';
 
 class PublishScreen extends ConsumerStatefulWidget {
   final String videoPath;
@@ -109,8 +111,8 @@ class _PublishScreenState extends ConsumerState<PublishScreen> {
         throw Exception('Utilisateur non authentifié');
       }
 
-      final apiService = ref.read(apiServiceProvider);
-      final videoRepository = VideoRepository(apiService.dio);
+      final dio = ref.read(dioProvider);
+      final videoRepository = VideoRepository(dio);
       final data = {
         'title': _captionController.text.trim(),
         'description': _captionController.text.trim(),

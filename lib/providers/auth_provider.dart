@@ -16,6 +16,7 @@ class AuthState {
   final String? userId;
   final String? email;
   final String? username;
+  final String? token;
 
   const AuthState({
     required this.isAuthenticated,
@@ -25,6 +26,7 @@ class AuthState {
     this.userId,
     this.email,
     this.username,
+    this.token,
   });
 
   factory AuthState.initial() {
@@ -36,6 +38,7 @@ class AuthState {
       userId: null,
       email: null,
       username: null,
+      token: null,
     );
   }
 
@@ -47,6 +50,7 @@ class AuthState {
     String? userId,
     String? email,
     String? username,
+    String? token,
   }) {
     return AuthState(
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
@@ -56,6 +60,7 @@ class AuthState {
       userId: userId ?? this.userId,
       email: email ?? this.email,
       username: username ?? this.username,
+      token: token ?? this.token,
     );
   }
 }
@@ -105,6 +110,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         email: user['email'],
         userId: user['id'],
         username: user['username'],
+        token: accessToken,
       );
 
       return true;
@@ -221,6 +227,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         email: user['email'],
         username: user['username'],
         userId: user['id'],
+        token: accessToken,
       );
 
       return true;
@@ -312,6 +319,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final userId = prefs.getString('userId');
         final email = prefs.getString('email');
         final username = prefs.getString('username');
+        final token = prefs.getString('accessToken');
 
         state = state.copyWith(
           isAuthenticated: true,
@@ -320,6 +328,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           userId: userId,
           email: email,
           username: username,
+          token: token,
         );
       } else {
         state = state.copyWith(isLoading: false);

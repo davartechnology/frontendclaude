@@ -1,65 +1,99 @@
-// lib/core/services/api_service.dart
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'storage_service.dart';
 
+import '../../providers/auth_provider.dart';
+import '../constants/api_constants.dart'; // ⚠️ IMPORTANT
 
-
-final apiServiceProvider = Provider<ApiService>((ref) => ApiService());
-
-class ApiService {
-  late final Dio _dio;
-  final StorageService _storage = StorageService();
-
-  ApiService() {
-    String baseUrl = '${dotenv.env['BACKEND_URL'] ?? 'https://backendclaude-j98w.onrender.com'}/api';
-
-    _dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+/// 1️⃣ Dio Provider
+final dioProvider = Provider<Dio>((ref) {
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: ApiConstants.baseUrl, // ✅ BASE URL CORRECTE
+      connectTimeout: ApiConstants.timeout,
+      receiveTimeout: ApiConstants.timeout,
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
       },
-    ));
+    ),
+  );
 
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final token = await _storage.getToken();
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
-          return handler.next(options);
-        },
-      ),
-    );
-  }
+  /// 🔐 Interceptor Auth
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        final token = ref.read(authProvider).token;
+        if (token != null && token.isNotEmpty) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
 
-  // 👇 AJOUT IMPORTANT
-  Dio get dio => _dio;
+        // 🔍 LOG DEBUG (SUPER IMPORTANT)
+        print('🔗 REQUEST → ${options.method} ${options.uri}');
+        print('🧾 HEADERS → ${options.headers}');
 
+        return handler.next(options);
+      },
+      onError: (error, handler) {
+        print('❌ API ERROR → ${error.response?.statusCode}');
+        print('❌ MESSAGE → ${error.message}');
+        return handler.next(error);
+      },
+    ),
+  );
+
+  return dio;
+});
+
+
+/// 2️⃣ ApiService Provider
+final apiServiceProvider = Provider<ApiService>((ref) {
+  final dio = ref.watch(dioProvider);
+  return ApiService(dio);
+});
+
+
+/// 3️⃣ ApiService
+class ApiService {
+  final Dio dio;
+
+  ApiService(this.dio);
+
+  /// GET
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    try {
-      return await _dio.get(path, queryParameters: queryParameters);
-    } on DioException catch (e) {
-      if (e.response != null) return e.response!;
-      rethrow;
-    }
+    return await dio.get(
+      path,
+      queryParameters: queryParameters,
+    );
   }
 
-  Future<Response> post(String path, {dynamic data}) async {
-    try {
-      return await _dio.post(path, data: data);
-    } on DioException catch (e) {
-      if (e.response != null) return e.response!;
-      rethrow;
-    }
+  /// POST
+  Future<Response> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    return await dio.post(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+    );
+  }
+
+  /// PUT
+  Future<Response> put(
+    String path, {
+    dynamic data,
+  }) async {
+    return await dio.put(
+      path,
+      data: data,
+    );
+  }
+
+  /// DELETE
+  Future<Response> delete(String path) async {
+    return await dio.delete(path);
   }
 }

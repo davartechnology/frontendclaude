@@ -1,10 +1,17 @@
+import '../core/network/api_result.dart';
+import '../data/repositories/feed_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../core/services/api_service.dart'; // Import important pour le provider
 import '../data/models/video_model.dart';
+
+final feedRepositoryProvider = Provider<FeedRepository>((ref) {
+  final dio = ref.watch(dioProvider);
+  return FeedRepository(dio);
+});
 
 final feedProvider =
     StateNotifierProvider<FeedNotifier, FeedState>(
-  (ref) => FeedNotifier(),
+  (ref) => FeedNotifier(ref),
 );
 
 class FeedState {
@@ -32,19 +39,31 @@ class FeedState {
 }
 
 class FeedNotifier extends StateNotifier<FeedState> {
-  FeedNotifier() : super(const FeedState()) {
+  final Ref ref;
+
+  FeedNotifier(this.ref) : super(const FeedState()) {
     loadFeed();
   }
 
   Future<void> loadFeed() async {
     state = state.copyWith(isLoading: true, error: null);
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    // 1. Récupère le repository via ref
+    final repository = ref.read(feedRepositoryProvider);
+    final result = await repository.getForYouFeed();
 
-    state = state.copyWith(
-      videos: const [],
-      isLoading: false,
-    );
+    // 2. Utilise un bloc if/else au lieu de .when()
+    if (result is Success<List<VideoModel>>) {
+      state = state.copyWith(
+        videos: result.data,
+        isLoading: false
+      );
+    } else if (result is Error<List<VideoModel>>) {
+      state = state.copyWith(
+        error: result.failure.message,
+        isLoading: false
+      );
+    }
   }
 
   Future<void> refreshFeed() async {

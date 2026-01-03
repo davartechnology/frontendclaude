@@ -48,10 +48,8 @@ class VideoGrid extends ConsumerWidget {
           onTap: () {
           },
           child: Stack(
-            fit: StackFit.expand,
             children: [
-              Container(
-                color: Colors.grey[900],
+              Positioned.fill(
                 child: video.thumbnailUrl.isNotEmpty
                     ? Image.network(
                         video.thumbnailUrl,
@@ -71,28 +69,20 @@ class VideoGrid extends ConsumerWidget {
                       ),
               ),
               Positioned(
-                bottom: 4,
-                left: 4,
+                bottom: 5,
+                left: 5,
                 child: Row(
                   children: [
                     const Icon(
-                      Icons.play_arrow,
+                      Icons.play_arrow_outlined,
                       color: Colors.white,
                       size: 16,
                     ),
-                    const SizedBox(width: 4),
                     Text(
-                      Formatters.formatNumber(video.viewsCount),
+                      '${video.viewsCount}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 4,
-                            color: Colors.black,
-                          ),
-                        ],
                       ),
                     ),
                   ],

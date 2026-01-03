@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'config/theme.dart';
 import 'config/firebase_options.dart';
 import 'navigation/app_router.dart';
@@ -53,8 +54,13 @@ void main() async {
 
     // Initialiser AdMob
     print('📱 Initialisation d\'AdMob...');
-    await AdMobService().initialize();
-    print('✅ AdMob initialisé');
+    // N'initialise AdMob QUE si on n'est PAS sur le Web
+    if (!kIsWeb) {
+      await AdMobService().initialize();
+      print('✅ AdMob initialisé');
+    } else {
+      print('ℹ️ AdMob ignoré sur le Web');
+    }
 
     print('🎯 Lancement de l\'application...');
   } catch (e, stackTrace) {

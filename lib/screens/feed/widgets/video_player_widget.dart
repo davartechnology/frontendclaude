@@ -27,12 +27,18 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   void initState() {
     super.initState();
 
-    /// ⚠️ IMPORTANT
-    /// videoUrl DOIT être : assets/videos/video_X.mp4
-    _controller = VideoPlayerController.asset(
-      widget.videoUrl,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    );
+    // Détection automatique : si ça commence par http, c'est Cloudinary, sinon c'est un asset
+    if (widget.videoUrl.startsWith('http')) {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl),
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      );
+    } else {
+      _controller = VideoPlayerController.asset(
+        widget.videoUrl,
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      );
+    }
 
     _controller
       ..setLooping(true)

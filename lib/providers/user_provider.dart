@@ -7,7 +7,7 @@ import '../data/repositories/user_repository.dart';
 
 /// Repository provider
 final userRepositoryProvider = Provider<UserRepository>((ref) {
-  final apiService = ApiService();
+  final apiService = ref.read(apiServiceProvider);
   return UserRepository(apiService.dio);
 });
 
